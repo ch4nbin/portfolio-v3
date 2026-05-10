@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/*
+ * Full-screen grain above video + text. pointer-events: none keeps links clickable.
+ * File: public/grain.gif → url("/grain.gif")
+ */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-image: url("/grain.gif");
+  background-repeat: repeat;
+  background-size: auto;
+  opacity: 0.1;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
