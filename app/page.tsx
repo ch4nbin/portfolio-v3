@@ -9,7 +9,8 @@ export default function Home() {
         <div className="relative h-full w-full">
           {videoUrl ? (
             <video
-              className="h-full w-full scale-[1.115] object-cover blur-[3px]"
+              className="h-full w-full scale-[1.115] object-cover blur-[3px] -translate-y-[0.85%] translate-x-[2.75%]"
+              style={{ objectPosition: "58% 52%" }}
               autoPlay
               muted
               loop
@@ -24,22 +25,23 @@ export default function Home() {
               alt=""
               fill
               priority
-              className="scale-[1.115] object-cover blur-[3px]"
+              className="scale-[1.115] object-cover blur-[3px] -translate-y-[0.85%] translate-x-[2.75%]"
+              style={{ objectPosition: "58% 52%" }}
               aria-hidden
             />
           )}
         </div>
       </div>
 
-      <main className="relative z-10 flex min-h-dvh flex-col justify-center pl-[6%] pr-6 md:pl-[8%]">
+      <main className="fixed top-[calc(50svh-1.75rem)] left-0 z-10 w-full pl-[4%] pr-6 sm:top-[calc(50svh-2rem)] md:pl-[6%]">
         <div className="flex max-w-xl flex-col">
-          <h1 className="text-4xl font-extralight tracking-[0.12em] sm:text-[3rem] sm:tracking-[0.18em]">
+          <h1 className="m-0 text-3xl font-extralight leading-none tracking-[0.12em] sm:text-[2.5rem] sm:tracking-[0.18em]">
             chanbin park
           </h1>
 
           <div className="mt-5 flex flex-col gap-4">
             <nav
-              className="text-base font-light leading-none"
+              className="text-sm font-light leading-none sm:text-[0.9375rem]"
               aria-label="Primary"
             >
               <a
@@ -69,7 +71,7 @@ export default function Home() {
               aria-hidden
             />
 
-            <p className="text-[0.9375rem] font-light leading-none sm:text-base sm:leading-none">
+            <p className="text-sm font-light leading-none sm:text-[0.9375rem] sm:leading-none">
               cs @ princeton&nbsp;&nbsp;•&nbsp;&nbsp;t-mobile swe intern
             </p>
           </div>
