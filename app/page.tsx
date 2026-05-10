@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { HeroVideo } from "@/components/HeroVideo";
 
 const videoUrl = process.env.NEXT_PUBLIC_HERO_VIDEO_URL?.trim();
 
@@ -8,17 +9,7 @@ export default function Home() {
       <div className="fixed inset-0 z-0 overflow-hidden">
         <div className="relative h-full w-full">
           {videoUrl ? (
-            <video
-              className="h-full w-full scale-[1.115] object-cover blur-[3px] -translate-y-[0.85%] translate-x-[2.75%]"
-              style={{ objectPosition: "58% 52%" }}
-              autoPlay
-              muted
-              loop
-              playsInline
-              aria-hidden
-            >
-              <source src={videoUrl} type="video/mp4" />
-            </video>
+            <HeroVideo src={videoUrl} />
           ) : (
             <Image
               src="/hero-fallback.png"
