@@ -25,7 +25,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      <div className="relative z-10">{children}</div>
+      <div className="relative z-10 min-h-dvh">{children}</div>
 
       <div className="grain-overlay" aria-hidden />
     </div>

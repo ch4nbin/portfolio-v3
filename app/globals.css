@@ -3,6 +3,8 @@
 :root {
   --background: #000000;
   --foreground: #ffffff;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --grain-opacity: 0.14;
 }
 
 @theme inline {
@@ -16,10 +18,92 @@ body {
   color: var(--foreground);
 }
 
-/*
- * Full-screen grain above video + text. pointer-events: none keeps links clickable.
- * File: public/grain.gif → url("/grain.gif")
- */
+/* Line entrances use Web Animations API (see LineEntranceRoot); avoid stray CSS animations on marked nodes */
+.line-entrance-root [data-line-enter] {
+  animation: none !important;
+}
+
+/* Subpage copy: edge contrast on bright frames — no backdrop scrim */
+.read-on-video {
+  paint-order: stroke fill;
+  -webkit-text-stroke: 0.35px rgba(0, 0, 0, 0.42);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link-sleek,
+  .link-sleek::after,
+  .surface-hover {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .link-sleek:hover::after,
+  .link-sleek-active::after {
+    transform: scaleX(1);
+  }
+}
+
+.link-sleek {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2px;
+  text-decoration: none;
+  transition:
+    opacity 0.4s var(--ease-out-expo),
+    transform 0.4s var(--ease-out-expo),
+    color 0.3s ease;
+}
+
+.link-sleek::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.88);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.48s var(--ease-out-expo);
+}
+
+@media (hover: hover) {
+  .link-sleek:hover {
+    transform: translateY(-2px);
+  }
+
+  .link-sleek:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+.link-sleek:active {
+  transform: translateY(0);
+}
+
+.link-sleek-active::after {
+  transform: scaleX(1);
+}
+
+.link-sleek:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+@media (hover: hover) {
+  .surface-hover {
+    transition:
+      transform 0.45s var(--ease-out-expo),
+      opacity 0.45s var(--ease-out-expo);
+  }
+
+  .surface-hover:hover {
+    transform: translateY(-3px);
+    opacity: 0.96;
+  }
+}
+
 .grain-overlay {
   position: fixed;
   inset: 0;
@@ -27,7 +111,7 @@ body {
   background-image: url("/grain.gif");
   background-repeat: repeat;
   background-size: auto;
-  opacity: 0.1;
+  opacity: var(--grain-opacity);
   mix-blend-mode: soft-light;
   pointer-events: none;
 }

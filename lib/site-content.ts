@@ -3,6 +3,26 @@
  * Spacing normalized where PDF extraction merged words (“inPython” → “in Python”).
  */
 
+export type Education = {
+  school: string;
+  endDate: string;
+  degree: string;
+  location: string;
+  bullets: string[];
+};
+
+export const education: Education = {
+  school: "Princeton University",
+  endDate: "May 2028",
+  degree:
+    "Bachelor of Arts in Computer Science, Minors in Statistics & Machine Learning and Visual Arts",
+  location: "Princeton, NJ",
+  bullets: [
+    "Relevant Coursework: Data Structures and Algorithms, Programming Systems, Software Engineering, System Design, Distributed Systems, Machine Learning, Discrete Math, Linear Algebra, Multivariable Calculus, Computational Physics",
+    "Honors/Awards: The Gates Scholarship Finalist, Questbridge National College Match Finalist, CMU SAMS Scholar",
+  ],
+};
+
 export type Job = {
   org: string;
   dateRange: string;
@@ -73,12 +93,16 @@ export type Project = {
   title: string;
   stackLine: string;
   bullets: string[];
+  devpostUrl?: string;
+  githubUrl?: string;
 };
 
 export const projects: Project[] = [
   {
     title: "Atlas (HackPrinceton Spring ’26)",
     stackLine: "Next.js, TypeScript, Express.js, Three.js, Google Gemini",
+    devpostUrl: "https://devpost.com/software/atlas-kb2cnu",
+    githubUrl: "https://github.com/ch4nbin/atlas",
     bullets: [
       "Built an AI-powered 3D learning platform that uses Gaussian splatting to turn prompts into explorable worlds.",
       "Engineered Node.js/Express APIs for a PhotonAI iMessage world recommendation agent with 100ms latency.",
@@ -89,6 +113,8 @@ export const projects: Project[] = [
   {
     title: "Lumenta (SB Hacks XII)",
     stackLine: "Next.js, TypeScript, Node.js, MongoDB, YOLOv8",
+    devpostUrl: "https://devpost.com/software/lumenta",
+    githubUrl: "https://github.com/BhargavJakkaraju/Lumenta",
     bullets: [
       "Built an AI video surveillance platform that analyzes live security footage and triggers automated MCP actions.",
       "Combined on-device YOLOv8 detection with a blob-tracking motion algorithm achieving 85% stable object tracking.",

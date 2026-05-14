@@ -4,9 +4,21 @@ export function SubpageHeading() {
   return (
     <Link
       href="/"
-      className="mb-14 inline-block text-sm font-light tracking-[0.12em] text-white underline-offset-[4px] transition-opacity hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/90 sm:text-[0.9375rem]"
+      aria-label="Back to home"
+      className="link-sleek group mb-3 inline-flex items-center text-sm font-light tracking-[0.08em] text-white/90 hover:text-white sm:text-[0.9375rem]"
     >
-      chanbin park
+      <span
+        data-line-enter
+        className="inline-flex items-center gap-2"
+      >
+        <span
+          className="text-white/55 transition-colors group-hover:text-white/80"
+          aria-hidden
+        >
+          ←
+        </span>
+        <span>back</span>
+      </span>
     </Link>
   );
 }
