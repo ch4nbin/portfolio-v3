@@ -100,7 +100,7 @@ export default function ContactPage() {
                   ? undefined
                   : "noopener noreferrer"
               }
-              className="link-sleek group !inline-flex items-center gap-3 text-[0.9375rem] text-white/[0.95] opacity-[0.88] hover:opacity-100 md:text-sm lg:text-[0.9375rem]"
+              className="link-sleek group !inline-flex items-center gap-1.5 text-base font-light leading-snug text-white/[0.95] hover:text-white md:text-[1.025rem]"
             >
               <ContactChannelIcon label={label} />
               <span>{display}</span>

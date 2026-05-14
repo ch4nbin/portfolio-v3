@@ -21,7 +21,7 @@ export default function EducationPage() {
       <article className="surface-hover mt-8 min-h-0 flex-1 md:mt-6">
         <div data-line-enter className="flex min-h-0 flex-1 flex-col">
           <header className="flex flex-col gap-0.5">
-            <span className="text-[0.9375rem] font-light sm:text-sm">
+            <span className="text-base font-light md:text-[1.025rem]">
               {education.school}
             </span>
             <span className="text-xs font-light tracking-wide text-white/65">

@@ -24,7 +24,7 @@ export default function ProjectsPage() {
           <article key={p.title} className="surface-hover min-w-0">
             <div data-line-enter className="min-w-0">
               <header className="flex flex-col gap-1.5">
-                <h2 className="m-0 text-[0.9375rem] font-light md:text-sm">
+                <h2 className="m-0 text-base font-light md:text-[1.025rem]">
                   {p.title}
                 </h2>
                 {p.devpostUrl || p.githubUrl ? (

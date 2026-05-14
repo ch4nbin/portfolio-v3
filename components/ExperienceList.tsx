@@ -11,7 +11,7 @@ function JobCard({ job }: { job: Job }) {
       <div data-line-enter className="min-w-0">
         <header className="flex flex-col gap-1">
           <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-            <span className="text-[0.9375rem] font-light md:text-sm">
+            <span className="text-base font-light md:text-[1.025rem]">
               {job.org}
             </span>
             {job.note ? (
