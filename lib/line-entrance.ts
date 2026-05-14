@@ -30,8 +30,9 @@ export function startLineEntrance(root: HTMLElement): Animation[] {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const els = [...root.querySelectorAll<HTMLElement>("[data-line-enter]")];
-  const staggerMs = reduced ? 48 : 100;
-  const durationMs = reduced ? 200 : 520;
+  /** Shorter than earlier defaults so route changes feel snappier (less main-thread overlap). */
+  const staggerMs = reduced ? 32 : 56;
+  const durationMs = reduced ? 180 : 340;
   const easing = reduced ? EASING_REDUCED : EASING_FULL;
   const keyframes: Keyframe[] = reduced
     ? [REDUCED_FROM, REDUCED_TO]

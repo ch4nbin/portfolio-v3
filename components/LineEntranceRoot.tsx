@@ -10,8 +10,8 @@ type LineEntranceRootProps = {
 };
 
 /**
- * Sequential “written line” reveal on each `[data-line-enter]` in document
- * order (WAAPI). Remount this component (e.g. `key={pathname}`) to replay.
+ * Sequential “written line” reveal on each `[data-line-enter]` under this root
+ * (WAAPI). Re-runs when this component mounts (e.g. each subpage navigation).
  */
 export function LineEntranceRoot({ children, className }: LineEntranceRootProps) {
   const ref = useRef<HTMLDivElement>(null);

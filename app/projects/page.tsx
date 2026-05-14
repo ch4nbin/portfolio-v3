@@ -28,13 +28,13 @@ export default function ProjectsPage() {
                   {p.title}
                 </h2>
                 {p.devpostUrl || p.githubUrl ? (
-                  <p className="m-0 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-light md:text-[0.7rem]">
+                  <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm font-light md:text-[0.9375rem]">
                     {p.devpostUrl ? (
                       <Link
                         href={p.devpostUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="link-sleek text-white/88 hover:text-white"
+                        className="link-sleek inline-block py-1 text-white/88 hover:text-white"
                       >
                         Devpost
                       </Link>
@@ -49,7 +49,7 @@ export default function ProjectsPage() {
                         href={p.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="link-sleek text-white/88 hover:text-white"
+                        className="link-sleek inline-block py-1 text-white/88 hover:text-white"
                       >
                         GitHub
                       </Link>
