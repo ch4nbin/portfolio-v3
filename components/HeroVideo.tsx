@@ -7,8 +7,8 @@ type HeroVideoProps = {
 };
 
 /**
- * Background hero video with scale/framing tweaks on a wrapper layer.
- * Keeps programmatic play + muted/playsinline attributes for mobile.
+ * Background hero video — mobile Safari is strict about muted + playsinline
+ * and often needs play() again after load / visibility / first interaction.
  */
 export function HeroVideo({ src }: HeroVideoProps) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -20,12 +20,22 @@ export function HeroVideo({ src }: HeroVideoProps) {
     v.defaultMuted = true;
     v.muted = true;
     v.volume = 0;
+    v.playsInline = true;
     v.setAttribute("muted", "");
     v.setAttribute("playsinline", "");
     v.setAttribute("webkit-playsinline", "");
 
-    const p = v.play();
-    if (p !== undefined) void p.catch(() => {});
+    const run = () => {
+      const p = v.play();
+      if (p !== undefined) {
+        void p.catch(() => {
+          requestAnimationFrame(() => {
+            void v.play().catch(() => {});
+          });
+        });
+      }
+    };
+    run();
   }, []);
 
   useLayoutEffect(() => {
@@ -41,29 +51,50 @@ export function HeroVideo({ src }: HeroVideoProps) {
       "loadeddata",
       "canplay",
       "canplaythrough",
+      "stalled",
+      "suspend",
+      "waiting",
     ] as const;
-    events.forEach((e) => v.addEventListener(e, tryPlay, { passive: true }));
 
     const onVisibility = () => {
       if (document.visibilityState === "visible") tryPlay();
     };
+
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) tryPlay();
+    };
+
+    const onInteract = () => tryPlay();
+
+    /** iOS can pause inline video when returning from background — nudge play. */
+    const onPause = () => {
+      if (document.visibilityState === "visible" && !v.ended) {
+        queueMicrotask(tryPlay);
+      }
+    };
+
+    events.forEach((e) => v.addEventListener(e, tryPlay, { passive: true }));
+    v.addEventListener("pause", onPause);
     document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("pageshow", onPageShow);
+    window.addEventListener("touchstart", onInteract, { passive: true, capture: true });
+    window.addEventListener("touchend", onInteract, { passive: true, capture: true });
+    window.addEventListener("pointerdown", onInteract, { passive: true, capture: true });
 
     let n = 0;
     const interval = window.setInterval(() => {
       tryPlay();
-      if (++n >= 48) window.clearInterval(interval);
+      if (++n >= 60) window.clearInterval(interval);
     }, 200);
-
-    const onGesture = () => tryPlay();
-    window.addEventListener("touchstart", onGesture, { passive: true, capture: true });
-    window.addEventListener("touchend", onGesture, { passive: true, capture: true });
 
     return () => {
       events.forEach((e) => v.removeEventListener(e, tryPlay));
+      v.removeEventListener("pause", onPause);
       document.removeEventListener("visibilitychange", onVisibility);
-      window.removeEventListener("touchstart", onGesture, { capture: true });
-      window.removeEventListener("touchend", onGesture, { capture: true });
+      window.removeEventListener("pageshow", onPageShow);
+      window.removeEventListener("touchstart", onInteract, { capture: true });
+      window.removeEventListener("touchend", onInteract, { capture: true });
+      window.removeEventListener("pointerdown", onInteract, { capture: true });
       window.clearInterval(interval);
     };
   }, [src, tryPlay]);
@@ -83,6 +114,7 @@ export function HeroVideo({ src }: HeroVideoProps) {
           preload="auto"
           controls={false}
           disablePictureInPicture
+          disableRemotePlayback
           aria-hidden
         />
       </div>
