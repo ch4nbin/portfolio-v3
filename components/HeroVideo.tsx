@@ -7,16 +7,15 @@ type HeroVideoProps = {
 };
 
 /**
- * Background hero video — mobile Safari is strict about muted + playsinline
- * and often needs play() again after load / visibility / first interaction.
+ * Background hero video — mobile Safari is strict about muted + playsinline.
+ * iOS only treats `play()` as allowed if it runs in the same turn as a user
+ * gesture; a retry inside `requestAnimationFrame` loses that token, so
+ * gesture-driven retries must stay synchronous (unlike load/visibility retries).
  */
 export function HeroVideo({ src }: HeroVideoProps) {
   const ref = useRef<HTMLVideoElement>(null);
 
-  const tryPlay = useCallback(() => {
-    const v = ref.current;
-    if (!v) return;
-
+  const applyPlaybackAttrs = useCallback((v: HTMLVideoElement) => {
     v.defaultMuted = true;
     v.muted = true;
     v.volume = 0;
@@ -24,19 +23,36 @@ export function HeroVideo({ src }: HeroVideoProps) {
     v.setAttribute("muted", "");
     v.setAttribute("playsinline", "");
     v.setAttribute("webkit-playsinline", "");
+  }, []);
 
-    const run = () => {
-      const p = v.play();
-      if (p !== undefined) {
-        void p.catch(() => {
-          requestAnimationFrame(() => {
-            void v.play().catch(() => {});
-          });
+  const kickPlay = useCallback((v: HTMLVideoElement, gestureSafeRetry: boolean) => {
+    const p = v.play();
+    if (p === undefined) return;
+    void p.catch(() => {
+      if (gestureSafeRetry) {
+        void v.play().catch(() => {});
+      } else {
+        requestAnimationFrame(() => {
+          void v.play().catch(() => {});
         });
       }
-    };
-    run();
+    });
   }, []);
+
+  const tryPlay = useCallback(() => {
+    const v = ref.current;
+    if (!v) return;
+    applyPlaybackAttrs(v);
+    kickPlay(v, false);
+  }, [applyPlaybackAttrs, kickPlay]);
+
+  /** Same as tryPlay but retry stays sync — must run directly from touch/pointer. */
+  const tryPlayFromUserGesture = useCallback(() => {
+    const v = ref.current;
+    if (!v) return;
+    applyPlaybackAttrs(v);
+    kickPlay(v, true);
+  }, [applyPlaybackAttrs, kickPlay]);
 
   useLayoutEffect(() => {
     tryPlay();
@@ -64,7 +80,7 @@ export function HeroVideo({ src }: HeroVideoProps) {
       if (e.persisted) tryPlay();
     };
 
-    const onInteract = () => tryPlay();
+    const onInteract = () => tryPlayFromUserGesture();
 
     /** iOS can pause inline video when returning from background — nudge play. */
     const onPause = () => {
@@ -80,6 +96,7 @@ export function HeroVideo({ src }: HeroVideoProps) {
     window.addEventListener("touchstart", onInteract, { passive: true, capture: true });
     window.addEventListener("touchend", onInteract, { passive: true, capture: true });
     window.addEventListener("pointerdown", onInteract, { passive: true, capture: true });
+    window.addEventListener("click", onInteract, { passive: true, capture: true });
 
     let n = 0;
     const interval = window.setInterval(() => {
@@ -95,9 +112,10 @@ export function HeroVideo({ src }: HeroVideoProps) {
       window.removeEventListener("touchstart", onInteract, { capture: true });
       window.removeEventListener("touchend", onInteract, { capture: true });
       window.removeEventListener("pointerdown", onInteract, { capture: true });
+      window.removeEventListener("click", onInteract, { capture: true });
       window.clearInterval(interval);
     };
-  }, [src, tryPlay]);
+  }, [src, tryPlay, tryPlayFromUserGesture]);
 
   return (
     <div className="h-full w-full overflow-hidden">
