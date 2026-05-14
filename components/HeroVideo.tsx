@@ -180,7 +180,7 @@ export function HeroVideo({ src }: HeroVideoProps) {
                 tryPlayFromUserGestureRef.current();
               }}
             >
-              tap to play background video
+              tap anywhere toplay background video
             </button>
           </div>,
           document.body,
