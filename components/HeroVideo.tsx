@@ -174,7 +174,7 @@ export function HeroVideo({ src }: HeroVideoProps) {
           >
             <button
               type="button"
-              className="link-sleek pointer-events-auto rounded-full border border-white/[0.22] bg-black/50 px-4 py-2.5 text-xs font-light tracking-[0.06em] text-white/[0.92] backdrop-blur-sm"
+              className="pointer-events-auto inline-flex items-center justify-center rounded-full border border-white/[0.22] bg-black/50 px-5 py-2.5 text-xs font-light leading-none tracking-[0.06em] text-white/[0.92] backdrop-blur-sm transition-opacity active:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white/80 focus-visible:outline-offset-2"
               onPointerDown={(e) => {
                 e.preventDefault();
                 tryPlayFromUserGestureRef.current();
