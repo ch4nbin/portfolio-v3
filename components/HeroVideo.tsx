@@ -190,7 +190,7 @@ export function HeroVideo({ src }: HeroVideoProps) {
   return (
     <>
       <div className="h-full w-full overflow-hidden">
-        <div className="h-full w-full origin-center scale-[1.115] blur-[1px] -translate-y-[0.85%] translate-x-[2.75%] will-change-transform">
+        <div className="h-full w-full origin-center scale-[1.115] blur-[1.25px] -translate-y-[0.85%] translate-x-[2.75%] will-change-transform">
           <video
             ref={ref}
             src={src}
